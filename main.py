@@ -54,10 +54,10 @@ def estimate_atmospheric_light(img, dark, top_percent=0.001):
     num_pixels = int(dark.size * top_percent)
     num_pixels = max(num_pixels, 1)  # Ensure at least one pixel is selected
     
-    flat_dark = dark.flatten()
+    flat_dark = dark.flatten() # i*w + j
     indices = np.argsort(flat_dark)[-num_pixels:]
     
-    h, w = dark.shape
+    _, w = dark.shape
     y_coords = indices // w
     x_coords = indices % w
     
@@ -185,7 +185,7 @@ def refine_transmission(img, transmission, method='guided', eps=1e-10, lambda_=1
 
 def refine_transmission_guided(img, transmission, eps=1e-10):
     """
-    Refine the transmission map using guided filter (original implementation)
+    Refine the transmission map using guided filter
     """
     gray = cv2.cvtColor(np.clip(img * 255, 0, 255).astype(np.uint8), cv2.COLOR_RGB2GRAY).astype(np.float32) / 255.0
     
@@ -244,10 +244,10 @@ def recover_image(img, A, transmission, t0=0.1):
     """
     transmission = np.maximum(transmission, t0)
     
-    A_reshaped = A.reshape(1, 1, 3)
-    t_reshaped = transmission.reshape(*transmission.shape, 1)
+    A_ = A.reshape(1, 1, 3)
+    t_ = transmission.reshape(*transmission.shape, 1)
     
-    result = (img - A_reshaped) / t_reshaped + A_reshaped
+    result = (img - A_) / t_ + A_
     
     result = np.clip(result, 0, 1)
     
@@ -362,5 +362,4 @@ if __name__ == "__main__":
             # plt.axis('off')
             
             # plt.tight_layout()
-            # plt.savefig(os.path.join(output_dir, f"{filename.rsplit('.', 1)[0]}_visualization.jpg"), dpi=300)
             # plt.close()
