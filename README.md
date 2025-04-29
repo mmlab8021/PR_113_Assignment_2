@@ -10,7 +10,7 @@ This assignment implements single image haze removal using the dark channel prio
 
 Download the repo
 ```bash
-git clone https://github.com/mmlab8021/PR_113_Assignment1.git
+git clone https://github.com/mmlab8021/PR_113_Assignment_2.git
 cd PR_113_Assignment1
 ```
 
